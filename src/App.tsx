@@ -11,6 +11,7 @@ import { StartScreen } from './components/ui/StartScreen';
 import { ExpeditionJournal } from './components/ui/ExpeditionJournal';
 import { RunicCipherDecoder } from './components/ui/RunicCipherDecoder';
 import { ExpeditionCertificate } from './components/ui/ExpeditionCertificate';
+import { MobileGateScreen } from './components/ui/MobileGateScreen';
 import { useScrollStore } from './store/useScrollStore';
 import { CHECKPOINTS } from './data/checkpoints';
 import './App.css';
@@ -107,6 +108,7 @@ function App() {
 
   return (
     <ScrollProvider>
+      <MobileGateScreen />
       <StartScreen started={started} onStart={() => setStarted(true)} />
       <AppContent started={started} />
       <CustomCursor />
