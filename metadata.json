@@ -1,0 +1,6 @@
+{
+  "name": "journey",
+  "description": "An immersive scroll-based visual journey through eight checkpoints.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

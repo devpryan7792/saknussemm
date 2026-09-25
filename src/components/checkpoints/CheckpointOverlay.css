@@ -1,0 +1,533 @@
+/* ── OVERLAY WRAPPER ── */
+.checkpoint-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  opacity: 0;
+  pointer-events: none;
+  transition: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ── BACKGROUND ── */
+.checkpoint-bg {
+  position: absolute;
+  inset: 0;
+  transition: background-color 1.2s ease;
+}
+
+/* ── GRAIN TEXTURE OVERLAY ── */
+.checkpoint-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ── ATMOSPHERIC PARTICLES ── */
+.mural-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.mural-particle {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  filter: blur(1px);
+  animation: float-particle linear infinite;
+}
+
+@keyframes float-particle {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  20% { opacity: 0.5; }
+  80% { opacity: 0.5; }
+  100% { transform: translateY(-120px) translateX(60px); opacity: 0; }
+}
+
+/* ── CORNER ORNAMENTS ── */
+.checkpoint-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: var(--glow-color, #c9a84c);
+  border-style: solid;
+  opacity: 0.4;
+  z-index: 10;
+}
+.checkpoint-corner.tl { top: 12px; left: 12px; border-width: 1px 0 0 1px; }
+.checkpoint-corner.tr { top: 12px; right: 12px; border-width: 1px 1px 0 0; }
+.checkpoint-corner.bl { bottom: 12px; left: 12px; border-width: 0 0 1px 1px; }
+.checkpoint-corner.br { bottom: 12px; right: 12px; border-width: 0 1px 1px 0; }
+
+/* ── BASE CONTENT WRAPPER ── */
+.checkpoint-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  box-sizing: border-box;
+  padding: 5vh 6vw;
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 4;
+}
+
+/* ============================================================
+   8 DISTINCT ASYMMETRICAL SPATIAL CHOREOGRAPHY LAYOUTS
+   ============================================================ */
+
+/* ── 0: TOP IMAGE, BOTTOM TEXT (Centered Vertical Stack) ── */
+.layout-top-image-bottom-text {
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4vh 8vw 5vh;
+}
+.layout-top-image-bottom-text .illu-container {
+  width: 100%;
+  max-width: 520px;
+  max-height: 48vh;
+  display: flex;
+  justify-content: center;
+}
+.layout-top-image-bottom-text .text-container {
+  width: 100%;
+  max-width: 780px;
+  text-align: center;
+  align-items: center;
+  background: rgba(14, 10, 8, 0.85);
+  padding: 1.5rem 2.2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+}
+
+/* ── 1: LEFT IMAGE, RIGHT TEXT (Classic Horizontal Split) ── */
+.layout-left-image-right-text {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5vw;
+}
+.layout-left-image-right-text .illu-container {
+  flex: 1.15;
+  max-width: 540px;
+  display: flex;
+  justify-content: flex-start;
+}
+.layout-left-image-right-text .text-container {
+  flex: 0.85;
+  max-width: 460px;
+  background: rgba(10, 16, 20, 0.8);
+  padding: 1.8rem 2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(90, 180, 160, 0.3);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+}
+
+/* ── 2: RIGHT IMAGE, LEFT TEXT (Reversed Horizontal Split) ── */
+.layout-right-image-left-text {
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5vw;
+}
+.layout-right-image-left-text .illu-container {
+  flex: 1.15;
+  max-width: 540px;
+  display: flex;
+  justify-content: flex-end;
+}
+.layout-right-image-left-text .text-container {
+  flex: 0.85;
+  max-width: 460px;
+  background: rgba(14, 10, 8, 0.85);
+  padding: 1.8rem 2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+}
+
+/* ── 3: TOP-LEFT IMAGE, BOTTOM-RIGHT TEXT (Diagonal Acoustic Split) ── */
+.layout-diagonal-split {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  padding: 5vh 7vw 7vh;
+}
+.layout-diagonal-split .illu-container {
+  flex: 1;
+  max-width: 480px;
+  align-self: flex-start;
+}
+.layout-diagonal-split .text-container {
+  flex: 1;
+  max-width: 460px;
+  align-self: flex-end;
+  background: rgba(14, 9, 7, 0.85);
+  padding: 1.8rem 2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(217, 119, 6, 0.35);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+}
+
+/* ── 4: BOTTOM IMAGE, TOP TEXT (Inverted Vertical Stack) ── */
+.layout-bottom-image-top-text {
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4vh 8vw 5vh;
+}
+.layout-bottom-image-top-text .illu-container {
+  width: 100%;
+  max-width: 620px;
+  max-height: 48vh;
+  display: flex;
+  justify-content: center;
+}
+.layout-bottom-image-top-text .text-container {
+  width: 100%;
+  max-width: 780px;
+  text-align: center;
+  align-items: center;
+  background: rgba(5, 18, 26, 0.85);
+  padding: 1.5rem 2.2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+}
+
+/* ── 5: LEFT IMAGE, RIGHT TEXT (Marine Ocean Voyage) ── */
+.layout-marine-voyage {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5vw;
+}
+.layout-marine-voyage .illu-container {
+  flex: 1.2;
+  max-width: 580px;
+  display: flex;
+  justify-content: flex-start;
+}
+.layout-marine-voyage .text-container {
+  flex: 0.8;
+  max-width: 440px;
+  background: rgba(4, 12, 20, 0.85);
+  padding: 1.8rem 2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+}
+
+/* ── 6: RIGHT IMAGE, LEFT TEXT (Leviathan Arena Duel) ── */
+.layout-cinematic-arena {
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5vw;
+}
+.layout-cinematic-arena .illu-container {
+  flex: 1.2;
+  max-width: 580px;
+  display: flex;
+  justify-content: flex-end;
+}
+.layout-cinematic-arena .text-container {
+  flex: 0.8;
+  max-width: 460px;
+  background: rgba(22, 8, 6, 0.85);
+  padding: 1.8rem 2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95);
+}
+
+/* ── 7: TOP IMAGE, BOTTOM TEXT (Vertical Magma Rocket Surge) ── */
+.layout-vertical-surge {
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3vh 6vw 5vh;
+}
+.layout-vertical-surge .illu-container {
+  width: 100%;
+  max-width: 560px;
+  max-height: 48vh;
+  display: flex;
+  justify-content: center;
+}
+.layout-vertical-surge .text-container {
+  width: 100%;
+  max-width: 760px;
+  text-align: center;
+  align-items: center;
+  background: rgba(24, 10, 5, 0.85);
+  padding: 1.6rem 2.2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95);
+}
+
+/* ── TYPOGRAPHY & ELEMENTS ── */
+.checkpoint-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  color: #f2e6c9;
+  z-index: 5;
+}
+
+.checkpoint-top-line {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--glow-color, #c9a84c), transparent);
+  margin-bottom: 0.1rem;
+  opacity: 0.75;
+}
+
+.checkpoint-label {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.55rem, 0.9vw, 0.7rem);
+  letter-spacing: 0.4em;
+  color: var(--glow-color, #c9a84c);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.checkpoint-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1.3rem, 2.5vw, 2.2rem);
+  color: #f2e6c9;
+  line-height: 1.2;
+  margin: 0;
+  text-shadow: 0 0 35px var(--glow-color, #c9a84c);
+}
+
+.checkpoint-body {
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(0.95rem, 1.15vw, 1.12rem);
+  font-style: italic;
+  line-height: 1.7;
+  margin: 0;
+  color: #f2e6c9;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  user-select: none;
+}
+
+/* ── PROGRESSIVE WORD HIGHLIGHTING ── */
+.word-token {
+  display: inline-block;
+  margin-right: 0.28em;
+  transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              text-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity, color;
+}
+
+.word-dimmed {
+  color: #8c7e68;
+  opacity: 0.32;
+  transform: scale(0.98);
+}
+
+.word-highlighted {
+  color: #fff8e8;
+  opacity: 1;
+  transform: scale(1);
+  font-weight: 500;
+  text-shadow: 0 0 14px var(--glow-color, #c9a84c), 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+.word-active-cursor {
+  color: #ffffff;
+  opacity: 1;
+  transform: scale(1.04);
+  font-weight: 600;
+  text-shadow: 0 0 20px var(--glow-color, #c9a84c), 0 0 6px #fff;
+  border-bottom: 1.5px solid var(--glow-color, #c9a84c);
+}
+
+/* ── READING DECIPHER STATUS & PROGRESS BAR ── */
+.reading-status-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: 100%;
+  margin-top: 0.2rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  background: rgba(18, 12, 8, 0.65);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.reading-status-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.55rem, 0.75vw, 0.68rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--glow-color, #c9a84c);
+}
+
+.reading-progress-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.reading-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--glow-color, #c9a84c), #fff);
+  border-radius: 999px;
+  transition: width 0.15s ease-out;
+  box-shadow: 0 0 10px var(--glow-color, #c9a84c);
+}
+
+/* ── UNLOCK CUE BANNER ── */
+.strata-unlocked-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  background: rgba(34, 25, 14, 0.85);
+  border: 1px solid var(--glow-color, #c9a84c);
+  animation: unlock-pulse 2s infinite ease-in-out;
+  box-shadow: 0 0 20px rgba(201, 168, 76, 0.35);
+}
+
+@keyframes unlock-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(201, 168, 76, 0.2);
+    border-color: rgba(201, 168, 76, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px var(--glow-color, #c9a84c);
+    border-color: #fff;
+  }
+}
+
+.checkpoint-depth-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  color: var(--glow-color, #c9a84c);
+  border: 1px solid var(--glow-color, #c9a84c);
+  padding: 0.25rem 0.8rem;
+  opacity: 0.8;
+  width: fit-content;
+}
+
+/* ── RECITAL HINT ── */
+.recital-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.4rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  color: var(--glow-color, #c9a84c);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.wave-icon {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 12px;
+}
+
+.wave-icon span {
+  width: 2px;
+  height: 100%;
+  background-color: var(--glow-color, #c9a84c);
+  animation: wave-bounce 1s ease-in-out infinite;
+}
+
+.wave-icon span:nth-child(2) { animation-delay: 0.2s; }
+.wave-icon span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes wave-bounce {
+  0%, 100% { height: 40%; }
+  50% { height: 100%; }
+}
+
+/* ── SCROLL HINT ── */
+.checkpoint-scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.35em;
+  color: var(--glow-color, #c9a84c);
+  text-transform: uppercase;
+  opacity: 0.6;
+  animation: hint-pulse 2.5s ease-in-out infinite;
+  z-index: 10;
+  pointer-events: none;
+}
+
+@keyframes hint-pulse {
+  0%, 100% { opacity: 0.3; transform: translateX(-50%) translateY(0); }
+  50% { opacity: 0.8; transform: translateX(-50%) translateY(4px); }
+}
+
+/* ── RESPONSIVE ADAPTATIONS (Tablets & Mobile) ── */
+@media (max-width: 1024px) {
+  .checkpoint-slide {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 10vh 5vw 12vh !important;
+    gap: 3vh !important;
+    overflow-y: auto;
+  }
+
+  .illu-container {
+    width: 100% !important;
+    max-width: 480px !important;
+    max-height: 38vh !important;
+    margin: 0 auto !important;
+  }
+
+  .text-container {
+    width: 100% !important;
+    max-width: 520px !important;
+    margin: 0 auto !important;
+    background: rgba(10, 8, 6, 0.85) !important;
+    padding: 1.4rem !important;
+  }
+}
