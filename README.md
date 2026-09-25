@@ -22,13 +22,20 @@ An immersive, scroll-driven subterranean exploration web experience created as a
   - Real-time environmental palette shifting across 8 geological depths (glacier slate $\rightarrow$ granite chasm $\rightarrow$ phosphorescent fungi $\rightarrow$ Lidenbrock sea $\rightarrow$ molten magma).
 - **Interactive Adventurer's Lantern**:
   - The cursor acts as a lantern light source, illuminating uneven rock strata, revealing hidden runic carvings, and gently tilting the cavern's vanishing point for head-tracking parallax.
-- **Procedural Web Audio Soundscape**:
+- **Interactive Wall Runes & Whispers**:
+  - Saknussemm's runic markers etched along the tunnel walls respond to clicks and lantern proximity, emitting sparkling auras, mystical harmonic chime arpeggios, and deciphered ancient lore toasts.
+- **Milestone Seismic Camera Shake & Jitter**:
+  - Procedural tectonic tremors and camera rumbling during high-intensity moments: *The Leviathan Duel* (abyssal shocks) and *The Ascent of Stromboli* (violent volcanic eruption).
+- **Procedural Web Audio Soundscape & Descent Foley**:
   - Synthesized via the native Web Audio API without heavy external audio files:
     - Sub-bass tectonic drone (A1 / 55 Hz descending to 28 Hz rumbles).
+    - Rhythmic subterranean boot crunch & taut hemp rope strain foley triggered during rapid descent.
     - Subterranean wind noise generator with depth-reactive bandpass filtering.
     - Cavern water droplets and crystalline acoustic echoes.
-- **Narrative Checkpoints & Visual Choreography**:
-  - 8 distinct story milestones featuring animated classical engravings, micro-scroll parallax vectors, and rich literary prose.
+- **Scroll-Lock Gating for Deliberate Storytelling**:
+  - Integrated with Lenis virtual scroll physics: smoothly anchors at each checkpoint, highlighting the narrative text word-by-word with reading progress before permitting further descent.
+- **Exportable Expedition Certificate (Epilogue)**:
+  - Triumphant 19th-century parchment certificate honoring the traveler upon reaching the Epilogue: includes editable explorer name, route telemetry, clipboard dispatch copying, and celebration confetti.
 - **Expedition Journal & Runic Cipher**:
   - Interactive field notes modal recording discoveries at each depth.
   - Fully interactive Runic Cipher Decoder allowing travelers to decipher Saknussemm's ancient Icelandic cryptograms.

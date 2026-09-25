@@ -10,6 +10,8 @@ import { ProgressBar } from './components/ui/ProgressBar';
 import { StartScreen } from './components/ui/StartScreen';
 import { ExpeditionJournal } from './components/ui/ExpeditionJournal';
 import { RunicCipherDecoder } from './components/ui/RunicCipherDecoder';
+import { ExpeditionCertificate } from './components/ui/ExpeditionCertificate';
+import { useScrollStore } from './store/useScrollStore';
 import { CHECKPOINTS } from './data/checkpoints';
 import './App.css';
 
@@ -32,6 +34,9 @@ function SoundscapeRunner({ started }: { started: boolean }) {
 }
 
 function AppContent({ started }: { started: boolean }) {
+  const isCertificateOpen = useScrollStore((state) => state.isCertificateOpen);
+  const setCertificateOpen = useScrollStore((state) => state.setCertificateOpen);
+
   return (
     <>
       {started && <SoundscapeRunner started={started} />}
@@ -87,6 +92,10 @@ function AppContent({ started }: { started: boolean }) {
           {/* Interactive Modal Engines */}
           <ExpeditionJournal />
           <RunicCipherDecoder />
+          <ExpeditionCertificate
+            isOpen={isCertificateOpen}
+            onClose={() => setCertificateOpen(false)}
+          />
         </div>
       </div>
     </>

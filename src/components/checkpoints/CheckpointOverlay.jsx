@@ -4,7 +4,7 @@ import { useScrollStore } from '../../store/useScrollStore';
 import { CHECKPOINTS } from '../../data/checkpoints';
 import { ILLUSTRATION_CONFIG } from './illustrationConfig';
 import { AnimatedCheckpointIllustration } from '../illustrations/AnimatedCheckpointIllustration';
-import { Sparkles, BookOpen, Scroll, CheckCircle, ChevronDown } from 'lucide-react';
+import { Sparkles, BookOpen, Scroll, CheckCircle, ChevronDown, Award } from 'lucide-react';
 import './CheckpointOverlay.css';
 
 // Spatial choreography layout mappings per checkpoint ID
@@ -17,6 +17,7 @@ const LAYOUT_MAP = {
   5: 'layout-marine-voyage',         // Checkpoint 5: Left Image, Right Text (Oceanic drift)
   6: 'layout-cinematic-arena',       // Checkpoint 6: Right Image, Left Text (Leviathans battle)
   7: 'layout-vertical-surge',        // Checkpoint 7: Top Image, Bottom Text (Stromboli eruption)
+  8: 'layout-top-image-bottom-text', // Checkpoint 8: Top Image, Bottom Text (Epilogue)
 };
 
 // Initial glide vectors from center to target layout for GSAP transition sequence
@@ -60,6 +61,11 @@ const getTransitionOffsets = (checkpointId) => {
     case 7: // Top Image, Bottom Text (Skyward Magma Surge)
       return {
         startIllu: { x: 0, y: 130, scale: 0.88, opacity: 0 },
+        startText: { x: 0, y: -70, opacity: 0 },
+      };
+    case 8: // Top Image, Bottom Text (Epilogue / Return to Sun)
+      return {
+        startIllu: { x: 0, y: 110, scale: 0.88, opacity: 0 },
         startText: { x: 0, y: -70, opacity: 0 },
       };
     default:
@@ -114,6 +120,11 @@ const getGlideTransform = (id, localProgress) => {
         illu: `translate3d(0, ${norm * -45}px, 0)`,
         text: `translate3d(0, ${norm * 25}px, 0)`,
       };
+    case 8:
+      return {
+        illu: `translate3d(0, ${norm * -25}px, 0)`,
+        text: `translate3d(0, ${norm * 20}px, 0)`,
+      };
     default:
       return { illu: 'none', text: 'none' };
   }
@@ -126,6 +137,7 @@ export function CheckpointOverlay() {
   const isMuted = useScrollStore((state) => state.isMuted);
   const setJournalOpen = useScrollStore((state) => state.setJournalOpen);
   const setRunicDecoderOpen = useScrollStore((state) => state.setRunicDecoderOpen);
+  const setCertificateOpen = useScrollStore((state) => state.setCertificateOpen);
 
   const readingProgress = useScrollStore((state) => state.readingProgress);
   const unlockedCheckpoints = useScrollStore((state) => state.unlockedCheckpoints);
@@ -548,6 +560,16 @@ export function CheckpointOverlay() {
                     <Sparkles className="w-3.5 h-3.5 text-[#c9a84c]" />
                     <span>Decode Runes</span>
                   </button>
+
+                  {cp.id === 8 && (
+                    <button
+                      onClick={() => setCertificateOpen(true)}
+                      className="px-3.5 py-1.5 border border-[#ffd700] hover:border-[#fff] bg-[#ffd700]/25 hover:bg-[#ffd700]/45 text-xs text-[#fff] rounded-sm flex items-center gap-1.5 transition-all font-['Cinzel'] tracking-wider uppercase shadow-[0_0_20px_rgba(255,215,0,0.4)] animate-pulse"
+                    >
+                      <Award className="w-4 h-4 text-[#ffd700]" />
+                      <span>Expedition Certificate</span>
+                    </button>
+                  )}
                 </div>
 
                 {/* Animated Cave Recital Hint */}

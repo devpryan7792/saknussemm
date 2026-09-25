@@ -140,12 +140,16 @@ export const CHECKPOINTS = [
     scrollStart: 0.95,
     scrollEnd: 1.00,
     depth: "0 km",
-    depthPercent: 5,
+    depthPercent: 0,
     envKey: "credits",
-    needleAngle: 78,
-    envLabel: "Epilogue",
+    needleAngle: 90,
+    envLabel: "The Return to Light",
     fogColor: "#1a3a5a",
     fogDensity: 0.012,
-    card: null
+    card: {
+      label: "The Voyage Accomplished",
+      title: "Epilogue: Return to the Sun",
+      body: "We stand once more beneath the azure vault of heaven. The silent subterranean cathedrals have released us, yet their ancient memory is forever seared into our souls. Arne Saknussemm's summons has been answered, the planetary axis traversed, and the unknown depths vanquished. You have completed the Journey to the Center of the Earth."
+    }
   }
 ];

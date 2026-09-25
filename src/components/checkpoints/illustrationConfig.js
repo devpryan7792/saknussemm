@@ -48,4 +48,10 @@ export const ILLUSTRATION_CONFIG = {
     glowColor: '#ffcc60',         // warm gold sunlight
     overlayTint: 'rgba(255, 204, 96, 0.08)',
   },
+  8: {
+    // Checkpoint 8: Epilogue / Return to the Sun
+    bgColor: '#102236',
+    glowColor: '#ffd700',         // triumphant radiant gold
+    overlayTint: 'rgba(255, 215, 0, 0.10)',
+  },
 };

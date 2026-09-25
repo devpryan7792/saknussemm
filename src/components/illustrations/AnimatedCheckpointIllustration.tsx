@@ -75,6 +75,13 @@ const PLATES: Record<number, PlateMeta> = {
     location: 'Mount Stromboli · Sicily, Italy',
     date: 'SEPTEMBER 1863',
   },
+  8: {
+    src: plate7,
+    plateNum: 'PLATE IX',
+    title: 'THE SUNLIT MEDITERRANEAN HORIZON',
+    location: 'Stromboli · Tyrrhenian Sea',
+    date: 'SEPTEMBER 1863',
+  },
 };
 
 interface AnimatedCheckpointIllustrationProps {

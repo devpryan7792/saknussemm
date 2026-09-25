@@ -1,13 +1,63 @@
 import { useEffect, useRef } from 'react';
 import { useScrollStore } from '../store/useScrollStore';
 
-// Web Audio API Subterranean Generative Soundscape Engine
+// Web Audio API Subterranean Generative Soundscape & Interactive Foley Engine
+
+let globalAudioCtx = null;
+let globalMasterGain = null;
+
+// Triggerable runic whisper chime function for interactive wall runes
+export function playRunicWhisperAudio() {
+  if (!globalAudioCtx || !globalMasterGain) return;
+  const ctx = globalAudioCtx;
+  const master = globalMasterGain;
+  if (ctx.state === 'suspended') {
+    ctx.resume();
+  }
+
+  const now = ctx.currentTime;
+
+  // Shimmering mystical pentatonic harmonic stack (Saknussemm's ancient resonance)
+  const notes = [440, 554.37, 659.25, 830.61, 1108.73];
+  notes.forEach((freq, idx) => {
+    try {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const pan = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
+
+      osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.04);
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.02, now + 1.2);
+
+      const delayOffset = idx * 0.045;
+      gain.gain.setValueAtTime(0.0001, now + delayOffset);
+      gain.gain.exponentialRampToValueAtTime(0.045 / (idx + 1), now + delayOffset + 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + delayOffset + 1.4);
+
+      if (pan) {
+        pan.pan.setValueAtTime((idx - 2) * 0.35, now);
+        osc.connect(gain);
+        gain.connect(pan);
+        pan.connect(master);
+      } else {
+        osc.connect(gain);
+        gain.connect(master);
+      }
+
+      osc.start(now + delayOffset);
+      osc.stop(now + delayOffset + 1.5);
+    } catch (e) {}
+  });
+}
+
 export function useSyntheticSoundscape(started = false) {
   const isMuted = useScrollStore((state) => state.isMuted);
   const audioCtxRef = useRef(null);
   const masterGainRef = useRef(null);
   const nodesRef = useRef({});
   const analyserRef = useRef(null);
+  const lastScrollTimeRef = useRef(0);
+  const lastFoleyStepRef = useRef(0);
 
   useEffect(() => {
     if (!started) return;
@@ -18,11 +68,13 @@ export function useSyntheticSoundscape(started = false) {
 
     const ctx = new AudioCtx();
     audioCtxRef.current = ctx;
+    globalAudioCtx = ctx;
 
     const masterGain = ctx.createGain();
     masterGain.gain.setValueAtTime(0, ctx.currentTime);
     masterGain.connect(ctx.destination);
     masterGainRef.current = masterGain;
+    globalMasterGain = masterGain;
 
     // Analyser node for HUD waveform visualizer
     const analyser = ctx.createAnalyser();
@@ -91,7 +143,7 @@ export function useSyntheticSoundscape(started = false) {
     whiteNoise.start();
 
     // 4. Periodic Cavern Water Drips / Crystal Echoes
-    let dripInterval = setInterval(() => {
+    const dripInterval = setInterval(() => {
       if (ctx.state !== 'running' || masterGain.gain.value < 0.01) return;
       const progress = useScrollStore.getState().scrollProgress;
       if (progress < 0.25 || progress > 0.85) return;
@@ -113,9 +165,7 @@ export function useSyntheticSoundscape(started = false) {
 
         dripOsc.start();
         dripOsc.stop(ctx.currentTime + 0.45);
-      } catch (e) {
-        // Ignore audio cleanup ticks
-      }
+      } catch (e) {}
     }, 2400);
 
     nodesRef.current = {
@@ -136,6 +186,8 @@ export function useSyntheticSoundscape(started = false) {
       try {
         ctx.close();
       } catch (e) {}
+      globalAudioCtx = null;
+      globalMasterGain = null;
     };
   }, [started]);
 
@@ -152,7 +204,7 @@ export function useSyntheticSoundscape(started = false) {
     masterGainRef.current.gain.setTargetAtTime(targetGain, ctx.currentTime, 0.2);
   }, [isMuted]);
 
-  // Dynamic Frequency Modulations based on Scroll Depth
+  // Dynamic Frequency Modulations based on Scroll Depth & Descent Foley
   useEffect(() => {
     return useScrollStore.subscribe(
       (state) => state.scrollProgress,
@@ -161,11 +213,17 @@ export function useSyntheticSoundscape(started = false) {
         if (!nodes || !nodes.ctx) return;
         const ctx = nodes.ctx;
         const t = ctx.currentTime;
+        const nowMs = performance.now();
 
         try {
-          // Adjust sub-bass frequency based on depth (rumbles deeper as we plunge)
-          const targetSubFreq = 65 - p * 30; // 65Hz at surface -> 35Hz at core
-          nodes.subOsc.frequency.setTargetAtTime(Math.max(28, targetSubFreq), t, 0.3);
+          // Checkpoint 6 (Leviathan) & 7 (Stromboli) tectonic rumble boost
+          const cpId = useScrollStore.getState().currentCheckpoint?.id ?? 0;
+          const isMilestoneStorm = cpId === 6 || cpId === 7;
+
+          // Adjust sub-bass frequency based on depth
+          const targetSubFreq = isMilestoneStorm ? (cpId === 7 ? 40 : 32) : (65 - p * 30);
+          nodes.subOsc.frequency.setTargetAtTime(Math.max(26, targetSubFreq), t, 0.25);
+          nodes.subGain.gain.setTargetAtTime(isMilestoneStorm ? 0.22 : 0.12, t, 0.2);
 
           // Modulate chord frequency and filter
           if (p < 0.25) {
@@ -177,21 +235,51 @@ export function useSyntheticSoundscape(started = false) {
           } else if (p < 0.55) {
             // Caves & Tunnels: Hollow wind acoustics
             nodes.chordFilter.frequency.setTargetAtTime(320, t, 0.4);
-            nodes.chordOsc1.frequency.setTargetAtTime(82.41, t, 0.4); // E2
-            nodes.chordOsc2.frequency.setTargetAtTime(123.47, t, 0.4); // B2
+            nodes.chordOsc1.frequency.setTargetAtTime(82.41, t, 0.4);
+            nodes.chordOsc2.frequency.setTargetAtTime(123.47, t, 0.4);
             nodes.noiseFilter.frequency.setTargetAtTime(420, t, 0.4);
           } else if (p < 0.8) {
             // Lidenbrock Sea & Prehistoric: Crystalline marine shimmers
             nodes.chordFilter.frequency.setTargetAtTime(950, t, 0.4);
-            nodes.chordOsc1.frequency.setTargetAtTime(130.81, t, 0.4); // C3
-            nodes.chordOsc2.frequency.setTargetAtTime(196.00, t, 0.4); // G3
+            nodes.chordOsc1.frequency.setTargetAtTime(130.81, t, 0.4);
+            nodes.chordOsc2.frequency.setTargetAtTime(196.00, t, 0.4);
             nodes.noiseFilter.frequency.setTargetAtTime(560, t, 0.4);
           } else {
-            // Stromboli / Magma: Deep volcanic friction & roar
+            // Stromboli / Magma: Deep volcanic roar
             nodes.chordFilter.frequency.setTargetAtTime(220, t, 0.4);
-            nodes.chordOsc1.frequency.setTargetAtTime(55, t, 0.4); // A1
-            nodes.chordOsc2.frequency.setTargetAtTime(82.41, t, 0.4); // E2
+            nodes.chordOsc1.frequency.setTargetAtTime(55, t, 0.4);
+            nodes.chordOsc2.frequency.setTargetAtTime(82.41, t, 0.4);
             nodes.noiseFilter.frequency.setTargetAtTime(150, t, 0.4);
+          }
+
+          // Subterranean Descent Foley: Subtle boot crunch & taut rope strain on rapid scroll
+          const timeSinceLastScroll = nowMs - lastScrollTimeRef.current;
+          lastScrollTimeRef.current = nowMs;
+
+          if (timeSinceLastScroll < 90 && nowMs - lastFoleyStepRef.current > 240 && !useScrollStore.getState().isMuted) {
+            lastFoleyStepRef.current = nowMs;
+            
+            // Faint crunch / gravel shift
+            const foleyOsc = ctx.createOscillator();
+            const foleyGain = ctx.createGain();
+            const foleyFilter = ctx.createBiquadFilter();
+
+            foleyOsc.type = Math.random() > 0.5 ? 'triangle' : 'sine';
+            foleyOsc.frequency.setValueAtTime(70 + Math.random() * 45, t);
+            foleyOsc.frequency.exponentialRampToValueAtTime(35, t + 0.08);
+
+            foleyFilter.type = 'lowpass';
+            foleyFilter.frequency.setValueAtTime(260, t);
+
+            foleyGain.gain.setValueAtTime(0.025, t);
+            foleyGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+
+            foleyOsc.connect(foleyFilter);
+            foleyFilter.connect(foleyGain);
+            foleyGain.connect(nodes.masterGain);
+
+            foleyOsc.start(t);
+            foleyOsc.stop(t + 0.12);
           }
         } catch (e) {}
       }

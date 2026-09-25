@@ -15,11 +15,13 @@ export const useScrollStore = create((set, get) => ({
   lenis: null,
   isJournalOpen: false,
   isRunicDecoderOpen: false,
+  isCertificateOpen: false,
 
   setLenis: (lenis) => set({ lenis }),
   setIsLocked: (locked) => set({ isLocked: locked }),
   setJournalOpen: (open) => set({ isJournalOpen: open }),
   setRunicDecoderOpen: (open) => set({ isRunicDecoderOpen: open }),
+  setCertificateOpen: (open) => set({ isCertificateOpen: open }),
 
   advanceCheckpointReading: (id, delta) => {
     const state = get();
