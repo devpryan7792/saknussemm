@@ -14,9 +14,12 @@ An immersive, scroll-driven subterranean exploration web experience created as a
 
 ## ✨ Features
 
-- **2.5D Generative Cavern Tunnel Engine (`Canvas 2D`)**:
+- **Volumetric 2.5D Generative Subterranean Engine (`Canvas 2D + WebGL FX`)**:
+  - **Procedural Volumetric Light Shafts (God Rays)**: Dynamic rotating light beams project outward from the adventurer's lantern into the cavern gloom, illuminating drifting dust motes and rock ridges with screen-blended radial attenuation.
+  - **Normal-Mapped Rock Strata Depth**: Concentric cavern rings compute 2D surface normals $\vec{N}$ and light vectors $\vec{L}$ in real time to render chiseled highlight facets ($N \cdot L$), deep ambient occlusion shadows, and specular crystal glints on wet rock ($N \cdot H$).
+  - **Multi-Pass Glowing Bloom**: Offscreen downsampled bloom buffer extracts high-luminance runes, fungal spores, and molten magma fissures, compositing a lush ethereal halo across the subterranean abyss.
+  - **Interactive WebGL Fluid Distortion on Archival Plates**: Checkpoint illustrations feature liquid wave disturbances, mouse wake ripples, chromatic aberration along wave crests, and biome-specific ambient convection (heat haze, acoustic vibrations, ocean swells).
   - Concentric jagged rock strata rings projected with perspective depth, expanding dynamically outward as you scroll downward.
-  - Organic cavern silhouettes synthesizing stalactites, rugged fissures, and cathedral-like vaulted ceilings.
   - 3D-to-2D projected atmospheric particles (ambient dust, glowing spores, and magma embers) rushing toward the viewer.
 - **Dynamic Biome Color Transitions**:
   - Real-time environmental palette shifting across 8 geological depths (glacier slate $\rightarrow$ granite chasm $\rightarrow$ phosphorescent fungi $\rightarrow$ Lidenbrock sea $\rightarrow$ molten magma).

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { FluidIllustrationCanvas } from './FluidIllustrationCanvas';
 
 import plate0 from '../../assets/images/verne_library_study_1790364948062.jpg';
 import plate1 from '../../assets/images/verne_iceland_glacier_1790364962606.jpg';
@@ -132,13 +133,12 @@ export function AnimatedCheckpointIllustration({
             {/* Lithograph Artwork Slot with Zero-Broken-Image Policy */}
             <div className="relative w-full aspect-[4/3] bg-[#0c0906] overflow-hidden">
               {!hasError ? (
-                <img
+                <FluidIllustrationCanvas
                   src={plate.src}
                   alt={plate.title}
-                  loading="eager"
-                  referrerPolicy="no-referrer"
-                  onError={() => setHasError(true)}
-                  className="w-full h-full object-cover block select-none pointer-events-none filter contrast-[1.04] brightness-[0.96]"
+                  checkpointId={checkpointId}
+                  glowColor={glowColor}
+                  className="w-full h-full object-cover block"
                 />
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-[#140e0a]">
