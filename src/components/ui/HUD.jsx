@@ -116,6 +116,12 @@ export function HUD() {
           <Key className="w-3.5 h-3.5 text-[#c9a84c]" />
           <span>RUNIC CIPHER</span>
         </MagneticButton>
+
+        {/* Engine Badge */}
+        <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded border border-[#c9a84c]/25 bg-[#0a0705]/60 text-[0.58rem] font-['Cinzel'] tracking-widest text-[#c9a84c]/80 select-none">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#38ef7d] animate-pulse shadow-[0_0_8px_#38ef7d]" />
+          <span>VOLUMETRIC V3</span>
+        </div>
       </div>
 
       {/* Progress Bar */}
